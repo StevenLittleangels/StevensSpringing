@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Engine/TriggerVolume.h"
 #include "NewActorComponentOpenDoor.generated.h"
 
 
@@ -24,6 +25,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
-	
+private:
+	UPROPERTY(VisibleAnywhere) //unreal macro I guess, how, why, who knows
+	float OpenAngle = 90.0f;
+
+	UPROPERTY(EditAnywhere)
+	ATriggerVolume* PressurePlate; //hey, you type stuff in visual studio and it appears magically in unreal, what sorcery
 };
