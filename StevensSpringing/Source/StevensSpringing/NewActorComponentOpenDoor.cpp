@@ -2,7 +2,7 @@
 
 #include "NewActorComponentOpenDoor.h"
 #include "Gameframework/Actor.h"
-
+#include "Engine/World.h"
 
 // Sets default values for this component's properties
 UNewActorComponentOpenDoor::UNewActorComponentOpenDoor()
@@ -21,6 +21,7 @@ void UNewActorComponentOpenDoor::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
 }
 

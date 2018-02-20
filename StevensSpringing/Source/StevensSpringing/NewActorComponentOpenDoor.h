@@ -34,6 +34,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate; //hey, you type stuff in visual studio and it appears magically in unreal, what sorcery
 
-	UPROPERTY(EditAnywhere)
+	//UPROPERTY(EditAnywhere)
 	AActor* ActorThatOpens; //the player pawn is an actor
 };
