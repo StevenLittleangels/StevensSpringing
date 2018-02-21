@@ -22,17 +22,24 @@ protected:
 	virtual void BeginPlay() override;
 
 	void OpenDoor();
+	void CloseDoor();
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	UPROPERTY(VisibleAnywhere) //unreal macro I guess, how, why, who knows
-	float OpenAngle = 90.0f;
+	UPROPERTY(EditAnywhere) //unreal macro I guess, how, why, who knows
+	float OpenAngle = -90.0f;
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate; //hey, you type stuff in visual studio and it appears magically in unreal, what sorcery
+
+	UPROPERTY(EditAnywhere)
+		float DoorCloseDelay = 0.5;
+
+	float LastDoorOpenTime;
+
 
 	//UPROPERTY(EditAnywhere)
 	AActor* ActorThatOpens; //the player pawn is an actor
