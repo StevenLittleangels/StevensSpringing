@@ -2,6 +2,9 @@
 
 #include "Grabber.h"
 #include "Gameframework/Actor.h"
+#include "Engine/World.h"
+
+#define OUT // defined unreal macro OUT that does nothing
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -22,6 +25,7 @@ void UGrabber::BeginPlay()
 	// ...
 	FString ObjectName = GetOwner()->GetName();
 	UE_LOG(LogTemp, Warning, TEXT("%s (Grabber) reporting for duty."), *ObjectName);
+
 }
 
 
@@ -31,5 +35,18 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	// get player viewpoint this tick
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+	);
+
+	FString Location = PlayerViewPointLocation.ToString();
+	UE_LOG(LogTemp, Warning, TEXT("Location is %s, Rotation is %s"), *Location, *PlayerViewPointRotation.ToString());
+
+	// raycast out to reach distance
+	// see what is hit
 }
 
