@@ -3,6 +3,7 @@
 #include "Grabber.h"
 #include "Gameframework/Actor.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 
 #define OUT // defined unreal macro OUT that does nothing
 
@@ -43,8 +44,24 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT PlayerViewPointRotation
 	);
 
-	FString Location = PlayerViewPointLocation.ToString();
-	UE_LOG(LogTemp, Warning, TEXT("Location is %s, Rotation is %s"), *Location, *PlayerViewPointRotation.ToString());
+	/*FString Location = PlayerViewPointLocation.ToString();
+	UE_LOG(LogTemp, Warning, TEXT("Location is %s, Rotation is %s"), *Location, *PlayerViewPointRotation.ToString());*/
+
+	FVector GrabReach = PlayerViewPointRotation.Vector() * Reach; // I'm an idiot and forgot to MULTIPLY by the reach, as per the slide 5 minutes ago. sigh.
+	FVector LineTraceEnd = PlayerViewPointLocation + GrabReach;
+
+	// draw a red trace in the world to visualize
+	DrawDebugLine(
+		GetWorld(),
+		PlayerViewPointLocation,
+		LineTraceEnd,
+		FColor(255, 0, 0),
+		false,
+		0.0f,
+		0.0f,
+		10.0f
+	);
+
 
 	// raycast out to reach distance
 	// see what is hit
