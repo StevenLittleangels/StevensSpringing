@@ -35,8 +35,22 @@ void UGrabber::BeginPlay()
 	else {
 		UE_LOG(LogTemp, Error, TEXT("%s has no physics handler!"), *GetOwner()->GetName()); //"let's not get into any more detail on that, you know you need to put a star" no I don't! it's not like my solution was exactly the same except for the * which you're so casually dismissing as if it's obvious and I don't know the fuck is going on, I mean fuck it's not like I just spent 90 minutes trying to fix the fucking error that came up when I did the previous lesson to reset the project AND I STILL DON'T KNOW WHAT THE FUCK HAPPENED AND WHY BOTH VS AND UNDREAL WOULD REFUSE TO REBUILD THE FUCKING DLL! FOUR TIMES! AND I DON'T EVEN KNOW WHY NOW IT WORKS AND I
 	}
+
+	///look for input component
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (InputComponent) {
+		UE_LOG(LogTemp, Warning, TEXT("%s has input"), *GetOwner()->GetName());
+		///bind input action
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+	}
+	else {
+		UE_LOG(LogTemp, Error, TEXT("%s has no input!"), *GetOwner()->GetName()); 
+	}
 }
 
+void UGrabber::Grab() {
+	UE_LOG(LogTemp, Warning, TEXT("grab pressed"));
+}
 
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
