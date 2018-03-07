@@ -53,14 +53,24 @@ void UGrabber::Grab() {
 	UE_LOG(LogTemp, Warning, TEXT("grab pressed"));
 
 	/// LINE TRACE	try to reach any actors with physics body collision channel
-	GetFirstPhysicsBodyInReach();
+	auto HitResult = GetFirstPhysicsBodyInReach();
+	auto ComponentToGrab = HitResult.GetComponent();
+	auto ComponentLocation = HitResult.GetActor()->GetActorLocation();
+	auto ActorHit = HitResult.GetActor();
 	/// if we hit something then attach a physics handle
-	// TODO attach physics handle
-
+	if (ActorHit != nullptr) {
+		// attach physics handle
+		PhysicsHandle->GrabComponentAtLocation(  // "go and look at the Q&A" yeah, thanks asshole, I am GOD for making this work without internet, and also unreal crashes if I don't hold grab for a bit before releasing U__U
+			ComponentToGrab,
+			NAME_None,
+			ComponentLocation
+		);
+	}
 }
 void UGrabber::Release() {
 	UE_LOG(LogTemp, Warning, TEXT("grab released"));
 	// TODO release physics
+	PhysicsHandle->ReleaseComponent();
 }
 
 // Called every frame
@@ -68,10 +78,22 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// if physics handle is attached
-		// move attached object
 
-	
+	FVector PlayerViewPointLocation;
+	FRotator PlayerViewPointRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(
+		OUT PlayerViewPointLocation,
+		OUT PlayerViewPointRotation
+	);
+
+	FVector GrabReach = PlayerViewPointRotation.Vector() * Reach;
+	FVector LineTraceEnd = PlayerViewPointLocation + GrabReach;
+
+	// if physics handle is attached
+	if (PhysicsHandle->GrabbedComponent) {
+		// move attached object
+		PhysicsHandle->SetTargetLocation(LineTraceEnd);
+	}
 }
 
 const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
@@ -109,5 +131,5 @@ const FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 		UE_LOG(LogTemp, Warning, TEXT("%s is being hit."), *(ActorHit->GetName()));
 	}
 
-	return FHitResult();
+	return Hit;
 }
