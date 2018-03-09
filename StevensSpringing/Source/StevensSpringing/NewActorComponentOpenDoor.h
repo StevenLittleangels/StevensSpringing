@@ -40,7 +40,5 @@ private:
 
 	float LastDoorOpenTime;
 
-
-	//UPROPERTY(EditAnywhere)
-	AActor* ActorThatOpens; //the player pawn is an actor
+	float GetTotalMassOfActorsOnPlate();
 };
