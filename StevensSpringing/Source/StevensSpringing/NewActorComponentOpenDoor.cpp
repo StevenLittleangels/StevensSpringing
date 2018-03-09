@@ -44,7 +44,7 @@ void UNewActorComponentOpenDoor::TickComponent(float DeltaTime, ELevelTick TickT
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Poll Trigger Volume every frame
-	if (GetTotalMassOfActorsOnPlate() > 50.0f) { // TODO change into a parameter
+	if (GetTotalMassOfActorsOnPlate() > 30.0f) { // TODO change into a parameter
 		OpenDoor();
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
 	}
@@ -62,6 +62,10 @@ float UNewActorComponentOpenDoor::GetTotalMassOfActorsOnPlate() {
 	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 
 	//iterate through their masses
+	for (const auto* Actor : OverlappingActors) {
+		TotalMass += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass(); // interesting that VS would complain about pointer to incomplete class not allowed or whatever, but unreal compiles and behaves the same as the lesson
+		UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *Actor->GetName());
+	}
 
 	return TotalMass;
 }
