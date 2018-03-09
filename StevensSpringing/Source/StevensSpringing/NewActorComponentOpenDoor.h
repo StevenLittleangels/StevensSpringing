@@ -33,7 +33,7 @@ private:
 	float OpenAngle = -90.0f;
 
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate; //hey, you type stuff in visual studio and it appears magically in unreal, what sorcery
+	ATriggerVolume* PressurePlate = nullptr; //hey, you type stuff in visual studio and it appears magically in unreal, what sorcery
 
 	UPROPERTY(EditAnywhere)
 		float DoorCloseDelay = 0.5;
