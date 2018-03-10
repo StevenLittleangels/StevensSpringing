@@ -48,16 +48,15 @@ void UGrabber::SetupInputComponent()
 void UGrabber::Grab() {
 	/// LINE TRACE	try to reach any actors with physics body collision channel
 	auto HitResult = GetFirstPhysicsBodyInReach();
-	auto ComponentToGrab = HitResult.GetComponent();
-	auto ComponentLocation = HitResult.GetActor()->GetActorLocation();
 	auto ActorHit = HitResult.GetActor();
 	/// if we hit something then attach a physics handle
 	if (ActorHit != nullptr) {
 		if (!PhysicsHandle) { return; }
-		PhysicsHandle->GrabComponentAtLocation(
-			ComponentToGrab,
-			NAME_None,  // TODO check this at home
-			ComponentLocation
+		PhysicsHandle->GrabComponentAtLocationWithRotation(
+			HitResult.GetComponent(),
+			NAME_None,									// I thought this was gonna be the problem not finding information on the fname inbonename to use with this new thing
+			HitResult.GetActor()->GetActorLocation(),
+			HitResult.GetActor()->GetActorRotation()    // instread, for whatever reason, storing the actor's rotation as I pick it up seems to have fixed the engine crashes. I guess weird physics?
 		);
 	}
 }
