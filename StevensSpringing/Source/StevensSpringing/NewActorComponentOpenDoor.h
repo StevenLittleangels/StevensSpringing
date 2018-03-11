@@ -7,7 +7,7 @@
 #include "Engine/TriggerVolume.h"
 #include "NewActorComponentOpenDoor.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOpenRequest);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEven);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class STEVENSSPRINGING_API UNewActorComponentOpenDoor : public UActorComponent
@@ -22,28 +22,23 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-	void OpenDoor();
-	void CloseDoor();
-
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
 	UPROPERTY(BlueprintAssignable)
-		FOnOpenRequest OnOpenRequest;
+	FDoorEven OnOpen;
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorEven OnClose;
 
 private:
-	UPROPERTY(EditAnywhere) //unreal macro I guess, how, why, who knows
-	float OpenAngle = -90.0f;
+	UPROPERTY(EditAnywhere)
+	float TriggerMass = 30.0f;
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate = nullptr; //hey, you type stuff in visual studio and it appears magically in unreal, what sorcery
-
-	UPROPERTY(EditAnywhere)
-		float DoorCloseDelay = 0.5;
-
-	float LastDoorOpenTime;
 
 	float GetTotalMassOfActorsOnPlate();
 };

@@ -26,32 +26,18 @@ void UNewActorComponentOpenDoor::BeginPlay()
 	}
 }
 
-void UNewActorComponentOpenDoor::OpenDoor()
-{
-	//GetOwner()->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
-	OnOpenRequest.Broadcast();
-}
-
-void UNewActorComponentOpenDoor::CloseDoor()
-{
-	GetOwner()->SetActorRotation(FRotator(0.f, 0.f, 0.f));
-}
-
-
-
 // Called every frame
 void UNewActorComponentOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// Poll Trigger Volume every frame
-	if (GetTotalMassOfActorsOnPlate() > 30.0f) { // TODO change into a parameter
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
+	if (GetTotalMassOfActorsOnPlate() > TriggerMass) {
+		OnOpen.Broadcast();
 	}
 
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay) {
-		CloseDoor();
+	else {
+		OnClose.Broadcast();
 	}
 }
 
